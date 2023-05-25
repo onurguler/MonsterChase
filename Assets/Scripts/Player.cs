@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D myBody;
     private SpriteRenderer sr;
     private Animator anim;
-    private string WALK_ANIMATION = "Walk";
+    private const string WALK_ANIMATION = "Walk";
 
     void Awake()
     {
@@ -39,16 +39,7 @@ public class Player : MonoBehaviour
 
     void AnimatePlayer()
     {
-        if (movementX == 0)
-            return;
-
-        if (movementX > 0)
-        {
-            sr.flipX = false;
-        }
-        else
-        {
-            sr.flipX = true;
-        }
+        anim.SetBool(WALK_ANIMATION, movementX != 0);
+        sr.flipX = movementX == 0 ? sr.flipX : movementX < 0;
     }
 }
