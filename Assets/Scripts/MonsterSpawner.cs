@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterSpawner : MonoBehaviour
@@ -14,9 +15,35 @@ public class MonsterSpawner : MonoBehaviour
     private int randomIndex;
     private int randomSide;
 
+    private List<GameObject> spawnedMonsters = new();
+
     void Start()
     {
         StartCoroutine(SpawnMonsters());
+    }
+
+    void FixedUpdate()
+    {
+        List<GameObject> monstersToRemove = new();
+        
+        foreach (GameObject monster in spawnedMonsters)
+        {
+            float speed = monster.GetComponent<Monster>().speed;
+            bool isOutOfBound = speed > 0 
+                ? monster.transform.position.x > rightPos.position.x
+                : monster.transform.position.x < leftPos.position.x;
+
+            if (isOutOfBound)
+            {
+                monstersToRemove.Add(monster);
+            }
+        }
+
+        foreach (GameObject monster in monstersToRemove)
+        {
+            spawnedMonsters.Remove(monster);
+            Destroy(monster);
+        }
     }
 
     IEnumerator SpawnMonsters()
@@ -41,6 +68,8 @@ public class MonsterSpawner : MonoBehaviour
                 spawnedMonster.GetComponent<Monster>().speed = -Random.Range(4, 10);
                 spawnedMonster.transform.localScale = new Vector3(-1f, 1f, 1f);
             }
+
+            spawnedMonsters.Add(spawnedMonster);
         }
     }
 }
