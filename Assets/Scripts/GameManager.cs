@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -40,10 +41,20 @@ public class GameManager : MonoBehaviour
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("onur");
         if (scene.name == "Gameplay")
         {
             Instantiate(characters[CharIndex]);
         }
+    }
+
+    public void EndGame()
+    {
+        StartCoroutine(WaitLoadScene());
+    }
+
+    private IEnumerator WaitLoadScene()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("MainMenu");
     }
 }

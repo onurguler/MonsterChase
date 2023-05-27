@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -66,13 +67,19 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.CompareTag(ENEMY_TAG))
         {
-            Destroy(gameObject);
+            PlayerDie();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag(ENEMY_TAG))
-            Destroy(gameObject);
+            PlayerDie();
+    }
+
+    private void PlayerDie()
+    {
+        GameManager.instance.EndGame();
+        Destroy(gameObject);
     }
 }
